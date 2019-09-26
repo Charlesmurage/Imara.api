@@ -1,7 +1,17 @@
+astroid==2.3.0
+colorama==0.4.1
 Django==1.11.17
 django-rest-auth==0.9.5
 djangorestframework==3.8.2
+djangorestframework-jwt==1.11.0
+isort==4.3.21
+lazy-object-proxy==1.4.2
+mccabe==0.6.1
 Pillow==6.1.0
 psycopg2==2.8.3
+PyJWT==1.7.1
+pylint==2.4.1
 pytz==2019.2
 six==1.12.0
+typed-ast==1.4.0
+wrapt==1.11.2
