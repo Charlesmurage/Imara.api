@@ -1,4 +1,4 @@
-Django==1.11
+Django==1.11.17
 django-rest-auth==0.9.5
 djangorestframework==3.8.2
 Pillow==6.1.0
