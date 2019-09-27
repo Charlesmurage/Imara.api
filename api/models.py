@@ -42,12 +42,12 @@ class Urban(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
-    stage_name = models.CharField(max_length=5)
+    stage_name = models.CharField(max_length=30)
     phone = models.CharField(max_length=12, blank=False, null=True, validators=[MinLengthValidator(10)])
     county = models.ForeignKey(Counties, null=True)
     urban_centre = models.ForeignKey(Urban, null=True)
     major_skill = models.ForeignKey(Major, null=True)
     minor_skill = models.ForeignKey(Minor, null=True)
-    photo = models.ImageField(upload_to='uploads', blank=True)
+    photo = models.ImageField(upload_to='uploads', blank=True, null=True)
 
 
