@@ -1,32 +1,60 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
+
+class Counties(models.Model):
+    county = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.county
 
 class CustomUser(AbstractUser):
     #additional fields here
     is_sponsor = models.BooleanField(default=False)
     is_creator = models.BooleanField(default=False)
+    
 
     def __str__(self):
         return self.email
 
 
-# class Role(models.Model):
-#   '''
-#   The Role entries are managed by the system,
-#   automatically created via a Django data migration.
-#   '''
-#   CONSUMER = 1
-#   CREATOR = 2
-#   SPONSOR = 3
-#   ADMIN = 4
-#   ROLE_CHOICES = (
-#       (CONSUMER, 'consumer'),
-#       (CREATOR, 'creator'),
-#       (SPONSOR, 'sponsor'),
-#       (ADMIN, 'admin'),
-#   )
 
-#   id = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, primary_key=True)
+class Urban(models.Model):
+    urban_centre = models.CharField(max_length=100, null=True)
+    county = models.ForeignKey(Counties,on_delete=models.CASCADE)
 
-#   def __str__(self):
-#       return self.get_id_display()
+    def __str__(self):
+        return self.urban_centre
+
+class Major(models.Model):
+    skill = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.skill
+
+class Minor(models.Model):
+    skill = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.skill
+
+
+class Creator(CustomUser):
+    '''
+    creating a profile model for each creator
+    '''
+    stage_name = models.CharField(max_length=100, null=True)
+    Phone = models.CharField(max_length=10, blank = False)
+    bio = models.TextField(max_length=500)
+    county = models.ForeignKey(Counties, on_delete = models.CASCADE, blank = False)
+    urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, blank = False )
+    major_skill = models.ForeignKey(Major, on_delete=models.CASCADE, blank = False )
+    minor_skill = models.ForeignKey(Minor, on_delete=models.CASCADE, blank = False )
+
+    def __str__(self):
+        return self.email
+
+    class Meta: 
+        verbose_name = 'Creator'
+        verbose_name_plural = 'Creators'
+
