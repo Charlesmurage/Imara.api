@@ -1,4 +1,4 @@
-#!/home/charles/Documents/imara/virtual/bin/python
+#!/home/charles/Documents/Imara.api/virtual/bin/python
 from django.core import management
 
 if __name__ == "__main__":
