@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     #additional fields here
     is_sponsor = models.BooleanField(default=False)
     is_creator = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='profile/', null= True)
     
 
     def __str__(self):
@@ -57,4 +58,5 @@ class Creator(CustomUser):
     class Meta: 
         verbose_name = 'Creator'
         verbose_name_plural = 'Creators'
+
 
