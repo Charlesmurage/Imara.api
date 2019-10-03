@@ -85,10 +85,8 @@ WSGI_APPLICATION = 'imara.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'iapi',
-        'USER': 'charles',
-    'PASSWORD':'chweezyy94',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
