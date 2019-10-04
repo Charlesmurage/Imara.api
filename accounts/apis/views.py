@@ -1,8 +1,8 @@
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from accounts.models import CustomUser, Creator
-from accounts.apis.serializers import UserSerializer, CreatorSerializer
+from accounts.models import CustomUser, Creator, Group, Membership
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer
 
 class UserListView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -22,3 +22,12 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+class GroupView(generics.ListCreateAPIView):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+
+class MembershipView(generics.ListCreateAPIView):
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer

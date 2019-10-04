@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, Major, Minor, Counties, Urban, Creator
+from .models import CustomUser, Major, Minor, Counties, Urban, Creator, Group, Membership
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -17,3 +17,5 @@ admin.site.register(Major)
 admin.site.register(Minor)
 admin.site.register(Counties)
 admin.site.register(Urban)
+admin.site.register(Group)
+admin.site.register(Membership)
