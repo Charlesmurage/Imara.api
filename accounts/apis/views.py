@@ -12,10 +12,6 @@ class CreatorView(generics.ListCreateAPIView):
     queryset = Creator.objects.all()
     serializer_class = CreatorSerializer
 
-    def load_urban(request):
-        county_id = request.GET.get('county')
-        urban = Urban.objects.filter(county_id=county_id).order_by('county')
-
 class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
