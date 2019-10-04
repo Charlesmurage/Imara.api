@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from accounts.models import CustomUser, Creator
 from django.contrib.auth.hashers import make_password
-from drf_writable_nested import WritableNestedModelSerializer
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
