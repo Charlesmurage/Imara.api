@@ -74,8 +74,6 @@ class Membership(models.Model):
     date_joined = models.DateField()
     invite_reason = models.CharField(max_length=64)
 
-    def __str__(self):
-        return self.creator.first_name
 
 
 
