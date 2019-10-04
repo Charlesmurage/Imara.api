@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import CustomUser, Creator
+from accounts.models import CustomUser, Creator, Group, Membership
 from django.contrib.auth.hashers import make_password
 from drf_writable_nested import WritableNestedModelSerializer
 
@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Creator
-        fields = ('username', 'first_name', 'last_name', 'email', "password",'county','urban_centre','major_skill','minor_skill')
+        fields = ('username', 'first_name', 'last_name','stage_name', 'email', "password",'county','urban_centre','major_skill','minor_skill')
 
     validate_password = make_password
 
@@ -22,3 +22,14 @@ class CreatorSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('name', 'members', )
+
+class MembershipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Membership
+        fields = ('creator', 'group', 'date_joined', 'invite_reason' )
