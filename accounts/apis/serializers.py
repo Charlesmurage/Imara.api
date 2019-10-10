@@ -5,12 +5,17 @@ from django.contrib.auth.hashers import make_password
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('email', 'username', )
+        fields = '__all__'
+
+class UserLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'password')
 
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Creator
-        fields = ('username', 'first_name', 'last_name','stage_name', 'email', "password",'county','urban_centre','major_skill','minor_skill')
+        fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'password', 'county', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license')
 
     validate_password = make_password
 
@@ -32,3 +37,9 @@ class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
         fields = ('creator', 'group', 'date_joined', 'invite_reason' )
+
+class TokenSerializer(serializers.Serializer):
+    """
+    This serializer serializes the token data
+    """
+    token = serializers.CharField(max_length=255)
