@@ -1,16 +1,21 @@
 from django.urls import path, include
 from accounts.apis.views import (
-    UserListView, CreatorView, CreatorPartialUpdateView, GroupView, MembershipView
+    UsersListView, CreatorPartialUpdateView, GroupView, MembershipView, CreatorSignupView, UserLoginView
 )
+from django.contrib.auth import views as auth_views
 
 app_name = "accounts"
 
 urlpatterns = [
-    path('users/', UserListView.as_view(), name="list"),
-    path('creators/', CreatorView.as_view(), name="creator-register"),
+    # URLs related to all users
+
+    path('users/', UsersListView.as_view(), name="list_all_users"),
+    path('signin/', UserLoginView.as_view(), name="user_login"),
+
+    # URLs related to Content Creators
+    path('creators/signup/', CreatorSignupView.as_view(), name="creator_signup"),
+    path('creators/update-partial/<int:pk>/', CreatorPartialUpdateView.as_view(), name='creator_update_profile'),
     path('creators/group/', GroupView.as_view(), name="groups"),
     path('creators/members/', MembershipView.as_view(), name="members"),
-    path('creators/update-partial/<int:pk>/', CreatorPartialUpdateView.as_view(), name='creator_partial_update'),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
+    #path('password/reset/', auth_views.PasswordResetView.as_view()),
 ]
