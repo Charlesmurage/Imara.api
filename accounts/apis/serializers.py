@@ -36,7 +36,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
-        fields = ('creator', 'group', 'date_joined', 'invite_reason' )
+        fields = ('creator', 'group')
 
 class TokenSerializer(serializers.Serializer):
     """
