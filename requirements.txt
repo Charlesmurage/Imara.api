@@ -12,6 +12,7 @@ djangorestframework==3.8.2
 djangorestframework-jwt==1.11.0
 drf-nested-serializer==0.1.0
 drf-writable-nested==0.5.1
+gunicorn==19.9.0
 idna==2.8
 isort==4.3.21
 lazy-object-proxy==1.4.2
