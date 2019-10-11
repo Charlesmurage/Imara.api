@@ -101,7 +101,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.find(county), urban_centre= Urban.objects.find(urban_centre), major_skill=Major.objects.find(major_skill), minor_skill=Minor.objects.find(minor_skill), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.filter(int(county)), urban_centre= Urban.objects.filter(int(urban_centre)), major_skill=Major.objects.filter(int(major_skill)), minor_skill=Minor.objects.filter(int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
