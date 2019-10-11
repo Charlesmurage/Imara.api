@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, MajorSkillSerializer, MinorSkillSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -133,3 +133,24 @@ class MembershipView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+
+class CountiesView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Counties.objects.all()
+    serializer_class = CountySerializer
+
+class UrbanCentresView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Urban.objects.all()
+    serializer_class = UrbanSerializer
+
+class MajorSkillsView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Major.objects.all()
+    serializer_class = MajorSkillSerializer
+
+class MinorSkillsView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Minor.objects.all()
+    serializer_class = MinorSkillSerializer

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import CustomUser, Creator, Group, Membership
+from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -43,3 +43,24 @@ class TokenSerializer(serializers.Serializer):
     This serializer serializes the token data
     """
     token = serializers.CharField(max_length=255)
+
+
+class CountySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Counties
+        fields = '__all__'
+
+class UrbanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Urban
+        fields = '__all__'
+
+class MajorSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Major
+        fields = '__all__'
+
+class MinorSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Minor
+        fields = '__all__'
