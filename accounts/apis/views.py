@@ -75,7 +75,7 @@ class CreatorSignupView(generics.CreateAPIView):
         phone = request.data.get("phone", "")
         password = request.data.get("password", "")
         county = request.data.get("county", "")
-        urban_center = request.data.get("urban_center", "")
+        urban_centre = request.data.get("urban_centre", "")
         major_skill = request.data.get("major_skill", "")
         minor_skill = request.data.get("minor_skill", "")
         agree_to_license = request.data.get("agree_to_license", "")
@@ -101,7 +101,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=county, urban_centre= urban_centre, major_skill=major_skill, minor_skill=minor_skill, agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
