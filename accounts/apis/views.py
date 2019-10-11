@@ -74,10 +74,10 @@ class CreatorSignupView(generics.CreateAPIView):
         email = request.data.get("email", "")
         phone = request.data.get("phone", "")
         password = request.data.get("password", "")
-        county = request.data.get("county", "")
-        urban_centre = request.data.get("urban_centre", "")
-        major_skill = request.data.get("major_skill", "")
-        minor_skill = request.data.get("minor_skill", "")
+        county = int(request.data.get("county", ""))
+        urban_centre = int(request.data.get("urban_centre", ""))
+        major_skill = int(request.data.get("major_skill", ""))
+        minor_skill = int(request.data.get("minor_skill", ""))
         agree_to_license = request.data.get("agree_to_license", "")
         if not first_name and not last_name and not stage_name and not password and not email:
             return Response(
@@ -101,7 +101,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.filter(int(county)), urban_centre= Urban.objects.filter(int(urban_centre)), major_skill=Major.objects.filter(int(major_skill)), minor_skill=Minor.objects.filter(int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.filter(county), urban_centre= Urban.objects.filter(urban_centre), major_skill=Major.objects.filter(major_skill), minor_skill=Minor.objects.filter(minor_skill), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
