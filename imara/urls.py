@@ -20,3 +20,7 @@ urlpatterns = [
     path('', admin.site.urls),
     path('api/v1/accounts/', include('accounts.apis.urls', 'accounts_apis')),
 ]
+
+admin.site.site_header = 'Imara TV Administration'
+admin.site.site_header = 'Dashboard'
+admin.site.index_title = 'Imara TV'
