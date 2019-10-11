@@ -11,6 +11,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+from django.shortcuts import get_object_or_404
 
 
 # Classes related to all users on the system
@@ -101,7 +102,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.filter(county), urban_centre= Urban.objects.filter(urban_centre), major_skill=Major.objects.filter(major_skill), minor_skill=Minor.objects.filter(minor_skill), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Major, pk=int(major_skill)), minor_skill=get_object_or_404(Minor, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
