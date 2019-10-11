@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from accounts.models import CustomUser, Creator, Group, Membership
+from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
 from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
@@ -101,7 +101,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=county, urban_centre= urban_centre, major_skill=major_skill, minor_skill=minor_skill, agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=Counties.objects.find(county), urban_centre= Urban.objects.find(urban_centre), major_skill=Major.objects.find(major_skill), minor_skill=Minor.objects.find(minor_skill), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
