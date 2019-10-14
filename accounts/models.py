@@ -114,8 +114,10 @@ class Group(models.Model):
 class Membership(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    date_joined = models.DateField()
-    invite_reason = models.CharField(max_length=64)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    # def __str__(self):
+    #     return self.creator
 
 
 
