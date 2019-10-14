@@ -22,4 +22,5 @@ urlpatterns = [
     path('creators/group/', GroupView.as_view(), name="groups"),
     path('creators/members/', MembershipView.as_view(), name="members"),
     #path('password/reset/', auth_views.PasswordResetView.as_view()),
+    path('rest-auth/', include('rest_auth.urls'))
 ]
