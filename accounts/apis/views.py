@@ -1,8 +1,8 @@
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, MajorSkillSerializer, MinorSkillSerializer
+from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -102,7 +102,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Major, pk=int(major_skill)), minor_skill=get_object_or_404(Minor, pk=int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
@@ -146,12 +146,12 @@ class UrbanCentresView(generics.ListAPIView):
     queryset = Urban.objects.all()
     serializer_class = UrbanSerializer
 
-class MajorSkillsView(generics.ListAPIView):
+class SkillsView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
-    queryset = Major.objects.all()
-    serializer_class = MajorSkillSerializer
+    queryset = Skills.objects.all()
+    serializer_class = SkillsSerializer
 
-class MinorSkillsView(generics.ListAPIView):
-    permission_classes = (permissions.AllowAny,)
-    queryset = Minor.objects.all()
-    serializer_class = MinorSkillSerializer
+# class MinorSkillsView(generics.ListAPIView):
+#     permission_classes = (permissions.AllowAny,)
+#     queryset = Minor.objects.all()
+#     serializer_class = MinorSkillSerializer

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
+from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
 from django.contrib.auth.hashers import make_password
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,12 +55,12 @@ class UrbanSerializer(serializers.ModelSerializer):
         model = Urban
         fields = '__all__'
 
-class MajorSkillSerializer(serializers.ModelSerializer):
+class SkillsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Major
+        model = Skills
         fields = '__all__'
 
-class MinorSkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Minor
-        fields = '__all__'
+# class MinorSkillSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Minor
+#         fields = '__all__'

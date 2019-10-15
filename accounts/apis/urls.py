@@ -1,6 +1,6 @@
 from django.urls import path, include
 from accounts.apis.views import (
-    UsersListView, CreatorPartialUpdateView, GroupView, MembershipView, CreatorSignupView, UserLoginView, CountiesView, UrbanCentresView, MajorSkillsView, MinorSkillsView
+    UsersListView, CreatorPartialUpdateView, GroupView, MembershipView, CreatorSignupView, UserLoginView, CountiesView, UrbanCentresView, SkillsView
 )
 from django.contrib.auth import views as auth_views
 
@@ -9,8 +9,8 @@ app_name = "accounts"
 urlpatterns = [
     path('counties/', CountiesView.as_view(), name="list_all_counties"),
     path('urbancentres/', UrbanCentresView.as_view(), name="list_all_urban_centers"),
-    path('majorskills/', MajorSkillsView.as_view(), name="list_all_major_skills"),
-    path('minorskills/', MinorSkillsView.as_view(), name="list_all_minorskills"),
+    path('skills/', SkillsView.as_view(), name="list_all_skills"),
+    # path('minorskills/', MinorSkillsView.as_view(), name="list_all_minorskills"),
     # URLs related to all users
 
     path('users/', UsersListView.as_view(), name="list_all_users"),
