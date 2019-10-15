@@ -1,8 +1,8 @@
 from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
-from accounts.models import CustomUser, Creator, Group, Membership
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer
+from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Major, Minor
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, MajorSkillSerializer, MinorSkillSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -11,6 +11,7 @@ from rest_framework_jwt.settings import api_settings
 from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+from django.shortcuts import get_object_or_404
 
 
 # Classes related to all users on the system
@@ -75,7 +76,7 @@ class CreatorSignupView(generics.CreateAPIView):
         phone = request.data.get("phone", "")
         password = request.data.get("password", "")
         county = request.data.get("county", "")
-        urban_center = request.data.get("urban_center", "")
+        urban_centre = request.data.get("urban_centre", "")
         major_skill = request.data.get("major_skill", "")
         minor_skill = request.data.get("minor_skill", "")
         agree_to_license = request.data.get("agree_to_license", "")
@@ -101,7 +102,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Major, pk=int(major_skill)), minor_skill=get_object_or_404(Minor, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
@@ -133,3 +134,24 @@ class MembershipView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+
+class CountiesView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Counties.objects.all()
+    serializer_class = CountySerializer
+
+class UrbanCentresView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Urban.objects.all()
+    serializer_class = UrbanSerializer
+
+class MajorSkillsView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Major.objects.all()
+    serializer_class = MajorSkillSerializer
+
+class MinorSkillsView(generics.ListAPIView):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Minor.objects.all()
+    serializer_class = MinorSkillSerializer
