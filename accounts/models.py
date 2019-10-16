@@ -89,7 +89,7 @@ class Creator(CustomUser):
     '''
     image = models.ImageField(upload_to='profile/', null= True, blank= True)
     stage_name = models.CharField(max_length=100, null=True)
-    phone = models.CharField(max_length=10, blank = False)
+    phone = models.CharField(max_length=13, blank = False)
     bio = models.TextField(max_length=500, blank= True)
     county = models.ForeignKey(Counties, on_delete = models.CASCADE, null= True, blank= False)
     urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, null= True, blank= False )

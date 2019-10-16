@@ -14,6 +14,7 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
 
 
+
 # Classes related to all users on the system
 
 
@@ -84,6 +85,13 @@ class CreatorSignupView(generics.CreateAPIView):
             return Response(
                 data={
                     "message": "Please fill in all required fields"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if county == "" and urban_centre == "" and major_skill == "" and minor_skill == "":
+            return Response(
+                data={
+                    "message": "Provide county and major skills details"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
