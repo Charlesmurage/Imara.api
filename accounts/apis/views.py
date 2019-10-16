@@ -110,7 +110,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
