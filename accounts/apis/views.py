@@ -6,13 +6,14 @@ from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSe
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import status
 from rest_framework_jwt.settings import api_settings
 from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+
 
 
 
@@ -123,7 +124,7 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 
     queryset = Creator.objects.all()
