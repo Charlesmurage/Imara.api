@@ -60,7 +60,3 @@ class SkillsSerializer(serializers.ModelSerializer):
         model = Skills
         fields = '__all__'
 
-# class MinorSkillSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Minor
-#         fields = '__all__'

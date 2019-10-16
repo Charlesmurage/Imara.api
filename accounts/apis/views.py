@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -122,6 +123,9 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
+    permission_classes = (IsAuthenticated,)
+
+
     queryset = Creator.objects.all()
     serializer_class = CreatorSerializer
     fields = ('first_name', 'last_name')
@@ -159,7 +163,4 @@ class SkillsView(generics.ListAPIView):
     queryset = Skills.objects.all()
     serializer_class = SkillsSerializer
 
-# class MinorSkillsView(generics.ListAPIView):
-#     permission_classes = (permissions.AllowAny,)
-#     queryset = Minor.objects.all()
-#     serializer_class = MinorSkillSerializer
+
