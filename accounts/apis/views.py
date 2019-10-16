@@ -15,6 +15,7 @@ from django.shortcuts import get_object_or_404
 
 
 
+
 # Classes related to all users on the system
 
 
@@ -149,10 +150,22 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
 
 # Classes related to all groups in the system
-class CreatorView(generics.ListCreateAPIView):
+class CreatorView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Creator.objects.all()
     serializer_class = CreatorProfileSerializer
+    def get(self, request, *args, **kwargs):
+        try:
+            creator = self.queryset.get(pk=kwargs["pk"])
+            return Response(CreatorProfileSerializer(creator).data)
+        except Creator.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Creator with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
