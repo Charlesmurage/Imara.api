@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, CreatorProfileSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -35,6 +35,7 @@ class UserLoginView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = UserLoginSerializer
     queryset = CustomUser.objects.all()
+    queryset = Creator.objects.all()
 
     def post(self, request, *args, **kwargs):
         email = request.data.get("email", "")
@@ -125,7 +126,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
@@ -148,6 +149,10 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
 
 # Classes related to all groups in the system
+class CreatorView(generics.ListCreateAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Creator.objects.all()
+    serializer_class = CreatorProfileSerializer
 
 class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)

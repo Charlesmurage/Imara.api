@@ -27,6 +27,11 @@ class CreatorSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class CreatorProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Creator
+        fields = '__all__'
+
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
