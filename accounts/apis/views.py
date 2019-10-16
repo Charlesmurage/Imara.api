@@ -137,6 +137,8 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
+    permission_classes = (permissions.IsAuthenticated,)
+    
     queryset = Creator.objects.all()
     serializer_class = CreatorSerializer
     fields = ('first_name', 'last_name')
