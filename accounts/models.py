@@ -51,6 +51,7 @@ class CustomUser(AbstractUser):
 
     username = None
     email = models.EmailField(_('email address'), unique=True)
+    
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -69,17 +70,17 @@ class Urban(models.Model):
     def __str__(self):
         return self.urban_centre
 
-class Major(models.Model):
+class Skills(models.Model):
     skill = models.CharField(max_length=100)
 
     def __str__(self):
         return self.skill
 
-class Minor(models.Model):
-    skill = models.CharField(max_length=100)
+# class Minor(models.Model):
+#     skill = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.skill
+#     def __str__(self):
+#         return self.skill
 
 
 class Creator(CustomUser):
@@ -88,12 +89,12 @@ class Creator(CustomUser):
     '''
     image = models.ImageField(upload_to='profile/', null= True, blank= True)
     stage_name = models.CharField(max_length=100, null=True)
-    phone = models.CharField(max_length=10, blank = False)
+    phone = models.CharField(max_length=13, blank = False)
     bio = models.TextField(max_length=500, blank= True)
-    county = models.ForeignKey(Counties, on_delete = models.CASCADE, null= True, blank= True)
-    urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, null= True, blank= True )
-    major_skill = models.ForeignKey(Major, on_delete=models.CASCADE, null= True, blank= True )
-    minor_skill = models.ForeignKey(Minor, on_delete=models.CASCADE, null= True, blank= True )
+    county = models.ForeignKey(Counties, on_delete = models.CASCADE, null= True, blank= False)
+    urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, null= True, blank= False )
+    major_skill = models.ForeignKey(Skills, on_delete=models.CASCADE, null= True, blank= False, related_name='major_skill' )
+    minor_skill = models.ForeignKey(Skills, on_delete=models.CASCADE, null= True, blank= False, related_name='minor_skill' )
     agree_to_license = models.BooleanField(default=False)
 
     def __str__(self):
@@ -114,8 +115,10 @@ class Group(models.Model):
 class Membership(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    date_joined = models.DateField()
-    invite_reason = models.CharField(max_length=64)
+    date_joined = models.DateTimeField(auto_now_add=True)
+
+    # def __str__(self):
+    #     return self.creator
 
 
 

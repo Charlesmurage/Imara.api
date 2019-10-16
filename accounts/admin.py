@@ -23,8 +23,7 @@ from .models import (
     Creator,
     Counties,
     Urban,
-    Major,
-    Minor,
+    Skills,
     Group,
     Membership
 )
@@ -53,8 +52,7 @@ class UserAdmin(DjangoUserAdmin):
 
 
 admin.site.register(Creator)
-admin.site.register(Major)
-admin.site.register(Minor)
+admin.site.register(Skills)
 admin.site.register(Counties)
 admin.site.register(Urban)
 admin.site.register(Group)

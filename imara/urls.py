@@ -17,6 +17,11 @@ from django.urls import path, include
 from django.contrib import admin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('/', include('django.contrib.auth.urls')),
+    path('', admin.site.urls),
     path('api/v1/accounts/', include('accounts.apis.urls', 'accounts_apis')),
 ]
+
+admin.site.site_header = 'Imara TV Administration'
+admin.site.site_header = 'Dashboard'
+admin.site.index_title = 'Imara TV'

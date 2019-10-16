@@ -1,0 +1,7 @@
+{
+<<<<<<< HEAD
+    "python.pythonPath": "venv\\Scripts\\python.exe"
+=======
+    "python.pythonPath": "virtual/bin/python3.6"
+>>>>>>> 9ea5a1428f5fd05a7c22388ab15ccc7bae617ee6
+}

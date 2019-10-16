@@ -1,1 +1,0 @@
-web: gunicorn Imara.api.wsgi --log-file -
