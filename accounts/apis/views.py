@@ -50,7 +50,22 @@ class UserLoginView(generics.CreateAPIView):
                     jwt_payload_handler(user)
                 )})
             serializer.is_valid()
-            return Response(serializer.data)
+            return Response(
+                data={
+                    "token": serializer.data['token'],
+                    "id": user.id,
+                    "firstName": user.first_name,
+                    "lastName": user.last_name,
+                    "email": user.email,
+                    "password": user.password,
+                    "isActive": user.is_active,
+                    "is_staff": user.is_staff,
+                    "is_superuser": user.is_superuser,
+                    "last_login": user.last_login,
+                    "date_joined": user.date_joined
+                },
+                status=status.HTTP_200_OK
+            )
         return Response(
                 data={
                     "message": "Wrong email or password"
@@ -154,7 +169,7 @@ class UrbanCentresView(generics.ListAPIView):
     queryset = Urban.objects.all()
     serializer_class = UrbanSerializer
 
-class SkillsView(generics.ListAPIView):
+class SkillsView(generics.ListCreateAPIView):
     permission_classes = (permissions.AllowAny,)
     queryset = Skills.objects.all()
     serializer_class = SkillsSerializer
