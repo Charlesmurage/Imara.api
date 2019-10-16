@@ -143,6 +143,13 @@ class GroupView(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
 
+    def delete(self, request, pk):
+        group = get_object_or_404(Group.objects.all(), pk=pk)
+        group.delete()
+        
+        return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
+
+
 class MembershipView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()

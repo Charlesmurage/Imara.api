@@ -33,6 +33,12 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = ('name', 'members', )
 
+    def delete(self, request, pk):
+        group = get_object_or_404(Group.objects.all(), pk=pk)
+        group.delete()
+        
+        return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
+
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
