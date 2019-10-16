@@ -155,6 +155,8 @@ class MembershipView(generics.ListCreateAPIView):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
 
+    
+
 
 class CountiesView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)

@@ -111,7 +111,8 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
-    #     return self.creator
+    #     return self.group
+
 
 
 
