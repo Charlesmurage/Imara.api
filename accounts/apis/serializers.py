@@ -15,7 +15,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Creator
-        fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'password', 'county', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license')
+        fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'password', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license')
 
     validate_password = make_password
 

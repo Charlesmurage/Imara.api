@@ -15,7 +15,6 @@ from django.shortcuts import get_object_or_404
 
 
 
-
 # Classes related to all users on the system
 
 
@@ -150,13 +149,20 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
 
 # Classes related to all groups in the system
-class CreatorView(generics.RetrieveUpdateDestroyAPIView):
+class CreatorView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Creator.objects.all()
     serializer_class = CreatorProfileSerializer
     def get(self, request, *args, **kwargs):
         try:
             creator = self.queryset.get(pk=kwargs["pk"])
+            if creator.id != request.user.id:
+                return Response(
+                    data={
+                        "message": "You do not have the required permissions"
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
             return Response(CreatorProfileSerializer(creator).data)
         except Creator.DoesNotExist:
             return Response(
