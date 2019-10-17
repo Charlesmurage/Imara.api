@@ -67,6 +67,7 @@ class UrbanSerializer(serializers.ModelSerializer):
         model = Urban
         fields = '__all__'
 
+
 class SkillsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skills

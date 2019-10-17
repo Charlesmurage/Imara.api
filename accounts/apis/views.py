@@ -204,8 +204,18 @@ class CountiesView(generics.ListAPIView):
 
 class UrbanCentresView(generics.ListAPIView):
     permission_classes = (permissions.AllowAny,)
-    queryset = Urban.objects.all()
     serializer_class = UrbanSerializer
+
+    def get_queryset(self):
+        queryset = Urban.objects.all()
+        county = self.request.query_params.get('county', '')
+        if county:
+            countyId = int(county)
+            return queryset.filter(county=countyId)
+        return queryset
+
+
+
 
 class SkillsView(generics.ListCreateAPIView):
     permission_classes = (permissions.AllowAny,)
