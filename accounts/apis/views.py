@@ -189,6 +189,22 @@ class GroupPartialUpdateView(GenericAPIView, UpdateModelMixin):
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+class GroupByIdView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    def get(self, request, *args, **kwargs):
+        try:
+            group = self.queryset.get(pk=kwargs["pk"])
+            return Response(GroupSerializer(group).data)
+        except Group.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Group with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
