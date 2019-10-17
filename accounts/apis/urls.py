@@ -20,6 +20,7 @@ urlpatterns = [
     path('creators/signup/', CreatorSignupView.as_view(), name="creator_signup"),
     path('creators/update-partial/<int:pk>/', CreatorPartialUpdateView.as_view(), name='creator_update_profile'),
     path('creators/group/delete/<int:pk>/', GroupView.as_view(), name='delete_group'),
+    path('creators/<int:pk>/', CreatorView.as_view(), name='creator_profile'),
     path('creators/group/', GroupView.as_view(), name="groups"),
     path('creators/members/', MembershipView.as_view(), name="members"),
     #path('password/reset/', auth_views.PasswordResetView.as_view()),
