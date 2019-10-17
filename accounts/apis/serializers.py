@@ -45,6 +45,12 @@ class GroupSerializer(serializers.ModelSerializer):
         
         return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
 
+    def partial_update(self, instance,  validated_data):
+        instance.name = validated_data.get('name', instance.name)
+
+        instance.save()
+        return instance
+
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership

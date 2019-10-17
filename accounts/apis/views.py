@@ -175,6 +175,36 @@ class CreatorView(generics.RetrieveAPIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+class GroupPartialUpdateView(GenericAPIView, UpdateModelMixin):
+    '''
+    You just need to provide the field which is to be modified.
+    '''
+    permission_classes = (permissions.IsAuthenticated,)
+
+
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    fields = ('name')
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+class GroupByIdView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+    def get(self, request, *args, **kwargs):
+        try:
+            group = self.queryset.get(pk=kwargs["pk"])
+            return Response(GroupSerializer(group).data)
+        except Group.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Group with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
