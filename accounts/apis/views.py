@@ -2,16 +2,18 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
+from accounts.apis.serializers import UserSerializer, CreatorSerializer, CreatorProfileSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import status
 from rest_framework_jwt.settings import api_settings
 from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
+
 
 
 
@@ -35,6 +37,7 @@ class UserLoginView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = UserLoginSerializer
     queryset = CustomUser.objects.all()
+    queryset = Creator.objects.all()
 
     def post(self, request, *args, **kwargs):
         email = request.data.get("email", "")
@@ -125,7 +128,7 @@ class CreatorSignupView(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, county=get_object_or_404(Counties, pk=int(county)), urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
@@ -137,6 +140,9 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
     You just need to provide the field which is to be modified.
     '''
+    permission_classes = (permissions.IsAuthenticated,)
+
+
     queryset = Creator.objects.all()
     serializer_class = CreatorSerializer
     fields = ('first_name', 'last_name')
@@ -146,6 +152,29 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
 
 
 # Classes related to all groups in the system
+class CreatorView(generics.RetrieveAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = Creator.objects.all()
+    serializer_class = CreatorProfileSerializer
+    def get(self, request, *args, **kwargs):
+        try:
+            creator = self.queryset.get(pk=kwargs["pk"])
+            if creator.id != request.user.id:
+                return Response(
+                    data={
+                        "message": "You do not have the required permissions"
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            return Response(CreatorProfileSerializer(creator).data)
+        except Creator.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Creator with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -153,10 +182,19 @@ class GroupView(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
 
+    def delete(self, request, pk):
+        group = get_object_or_404(Group.objects.all(), pk=pk)
+        group.delete()
+        
+        return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
+
+
 class MembershipView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+    
 
 
 class CountiesView(generics.ListAPIView):
@@ -174,7 +212,4 @@ class SkillsView(generics.ListCreateAPIView):
     queryset = Skills.objects.all()
     serializer_class = SkillsSerializer
 
-# class MinorSkillsView(generics.ListAPIView):
-#     permission_classes = (permissions.AllowAny,)
-#     queryset = Minor.objects.all()
-#     serializer_class = MinorSkillSerializer
+

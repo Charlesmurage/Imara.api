@@ -76,12 +76,6 @@ class Skills(models.Model):
     def __str__(self):
         return self.skill
 
-# class Minor(models.Model):
-#     skill = models.CharField(max_length=100)
-
-#     def __str__(self):
-#         return self.skill
-
 
 class Creator(CustomUser):
     '''
@@ -91,7 +85,6 @@ class Creator(CustomUser):
     stage_name = models.CharField(max_length=100, null=True)
     phone = models.CharField(max_length=13, blank = False)
     bio = models.TextField(max_length=500, blank= True)
-    county = models.ForeignKey(Counties, on_delete = models.CASCADE, null= True, blank= False)
     urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, null= True, blank= False )
     major_skill = models.ForeignKey(Skills, on_delete=models.CASCADE, null= True, blank= False, related_name='major_skill' )
     minor_skill = models.ForeignKey(Skills, on_delete=models.CASCADE, null= True, blank= False, related_name='minor_skill' )
@@ -118,7 +111,8 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
-    #     return self.creator
+    #     return self.group
+
 
 
 
