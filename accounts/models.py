@@ -76,12 +76,6 @@ class Skills(models.Model):
     def __str__(self):
         return self.skill
 
-# class Minor(models.Model):
-#     skill = models.CharField(max_length=100)
-
-#     def __str__(self):
-#         return self.skill
-
 
 class Creator(CustomUser):
     '''
@@ -117,7 +111,8 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
-    #     return self.creator
+    #     return self.group
+
 
 
 

@@ -6,12 +6,14 @@ from accounts.apis.serializers import UserSerializer, CreatorSerializer, Creator
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import status
 from rest_framework_jwt.settings import api_settings
 from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
+
 
 
 
@@ -139,7 +141,8 @@ class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
     You just need to provide the field which is to be modified.
     '''
     permission_classes = (permissions.IsAuthenticated,)
-    
+
+
     queryset = Creator.objects.all()
     serializer_class = CreatorSerializer
     fields = ('first_name', 'last_name')
@@ -179,10 +182,19 @@ class GroupView(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
 
 
+    def delete(self, request, pk):
+        group = get_object_or_404(Group.objects.all(), pk=pk)
+        group.delete()
+        
+        return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
+
+
 class MembershipView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+    
 
 
 class CountiesView(generics.ListAPIView):
@@ -200,7 +212,4 @@ class SkillsView(generics.ListCreateAPIView):
     queryset = Skills.objects.all()
     serializer_class = SkillsSerializer
 
-# class MinorSkillsView(generics.ListAPIView):
-#     permission_classes = (permissions.AllowAny,)
-#     queryset = Minor.objects.all()
-#     serializer_class = MinorSkillSerializer
+

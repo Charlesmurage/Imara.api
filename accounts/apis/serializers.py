@@ -34,9 +34,16 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Group
         fields = ('name', 'members', )
+
+    def delete(self, request, pk):
+        group = get_object_or_404(Group.objects.all(), pk=pk)
+        group.delete()
+        
+        return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
 
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -65,7 +72,3 @@ class SkillsSerializer(serializers.ModelSerializer):
         model = Skills
         fields = '__all__'
 
-# class MinorSkillSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Minor
-#         fields = '__all__'
