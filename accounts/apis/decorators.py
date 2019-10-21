@@ -80,10 +80,33 @@ def validate_signup_data(fn):
                 status=status.HTTP_409_CONFLICT
             )
 
+        if CustomUser.objects.filter(phone = phone):
+            return Response(
+                data={
+                    "error": "A user with that phone number already exists"
+                },
+                status=status.HTTP_409_CONFLICT
+            )
+
         if agree_to_license != True:
             return Response(
                 data={
                     "message": "You have to agree to the Creator license"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return fn(*args, **kwargs)
+    return decorated
+
+def validate_signin_data(fn):
+    def decorated(*args, **kwargs):
+        email = args[0].request.data.get("email", "")
+        password = args[0].request.data.get("password", "")
+
+        if not email or not password:
+            return Response(
+                data={
+                    "message": "Please fill in the missing fields"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )

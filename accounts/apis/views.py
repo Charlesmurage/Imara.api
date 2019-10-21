@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-from .decorators import validate_signup_data
+from .decorators import validate_signup_data, validate_signin_data
 
 
 # Classes related to all users on the system
@@ -38,9 +38,16 @@ class UserLoginView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     queryset = Creator.objects.all()
 
+    @validate_signin_data
     def post(self, request, *args, **kwargs):
-        email = request.data.get("email", "")
-        password = request.data.get("password", "")
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        try:
+            email = CustomUser.objects.get(phone=email).email
+        except CustomUser.DoesNotExist:
+            email = request.data.get("email")
+
         user = authenticate(request, email=email, password=password)
         if user is not None:
             # login saves the user’s ID in the session,
