@@ -13,8 +13,7 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-
-
+from .decorators import validate_signup_data
 
 
 # Classes related to all users on the system
@@ -87,48 +86,21 @@ class CreatorSignupView(generics.CreateAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = CreatorSerializer
 
+    @validate_signup_data
     def post(self, request, *args, **kwargs):
-        first_name = request.data.get("first_name", "")
-        last_name = request.data.get("last_name", "")
-        stage_name = request.data.get("stage_name", "")
-        email = request.data.get("email", "")
-        phone = request.data.get("phone", "")
-        password = request.data.get("password", "")
-        county = request.data.get("county", "")
-        urban_centre = request.data.get("urban_centre", "")
-        major_skill = request.data.get("major_skill", "")
-        minor_skill = request.data.get("minor_skill", "")
-        agree_to_license = request.data.get("agree_to_license", "")
-        if not first_name and not last_name and not stage_name and not password and not email:
-            return Response(
-                data={
-                    "message": "Please fill in all required fields"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if county == "" and urban_centre == "" and major_skill == "" and minor_skill == "":
-            return Response(
-                data={
-                    "message": "Provide county and major skills details"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if CustomUser.objects.filter(email = email):
-            return Response(
-                data={
-                    "message": "A user with that email already exists"
-                },
-                status=status.HTTP_409_CONFLICT
-            )
-        if agree_to_license != True:
-            return Response(
-                data={
-                    "message": "You have to agree to the Creator license"
-                },
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        first_name = request.data.get("first_name")
+        last_name = request.data.get("last_name")
+        stage_name = request.data.get("stage_name")
+        email = request.data.get("email")
+        phone = request.data.get("phone")
+        password = request.data.get("password")
+        urban_centre = request.data.get("urban_centre")
+        major_skill = request.data.get("major_skill")
+        minor_skill = request.data.get("minor_skill")
+        agree_to_license = request.data.get("agree_to_license")
+
         new_user = Creator.objects.create_user(
-        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, urban_centre= get_object_or_404(Urban, pk=int(urban_centre)), major_skill=get_object_or_404(Skills, pk=int(major_skill)), minor_skill=get_object_or_404(Skills, pk=int(minor_skill)), agree_to_license=agree_to_license 
+        first_name=first_name, last_name=last_name, stage_name=stage_name, email=email, phone=phone, password=password, urban_centre= get_object_or_404(Urban, pk=urban_centre), major_skill=get_object_or_404(Skills, pk=major_skill), minor_skill=get_object_or_404(Skills, pk=minor_skill), agree_to_license=agree_to_license 
         )
         return Response(
             data=CreatorSerializer(new_user).data,
