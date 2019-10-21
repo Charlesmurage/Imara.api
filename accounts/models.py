@@ -48,6 +48,7 @@ class CustomUser(AbstractUser):
     is_creator = models.BooleanField(default=False)
     first_name = models.CharField(null=False, max_length=30)
     last_name = models.CharField(null=False, max_length=30)
+    phone = models.CharField(max_length=13, blank = False, unique=True)
 
     username = None
     email = models.EmailField(_('email address'), unique=True)
@@ -83,7 +84,6 @@ class Creator(CustomUser):
     '''
     image = models.ImageField(upload_to='profile/', null= True, blank= True)
     stage_name = models.CharField(max_length=100, null=True)
-    phone = models.CharField(max_length=13, blank = False)
     bio = models.TextField(max_length=500, blank= True)
     urban_centre = models.ForeignKey(Urban ,on_delete=models.CASCADE, null= True, blank= False )
     major_skill = models.ForeignKey(Skills, on_delete=models.CASCADE, null= True, blank= False, related_name='major_skill' )
