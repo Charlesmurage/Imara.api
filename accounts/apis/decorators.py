@@ -101,14 +101,24 @@ def validate_signup_data(fn):
 def validate_signin_data(fn):
     def decorated(*args, **kwargs):
         email = args[0].request.data.get("email", "")
+        phone = args[0].request.data.get("phone", "")
         password = args[0].request.data.get("password", "")
 
-        if not email or not password:
+        if (email and phone) or not(email or phone):
             return Response(
                 data={
-                    "message": "Please fill in the missing fields"
+                    "message": "Please provide either a valid email or phone number"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        if not password:
+            return Response(
+                data={
+                    "message": "Please provide a password"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         return fn(*args, **kwargs)
     return decorated
