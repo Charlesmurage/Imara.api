@@ -41,10 +41,11 @@ class UserLoginView(generics.CreateAPIView):
     @validate_signin_data
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
+        phone = request.data.get("phone")
         password = request.data.get("password")
 
         try:
-            email = CustomUser.objects.get(phone=email).email
+            email = CustomUser.objects.get(phone=phone).email
         except CustomUser.DoesNotExist:
             email = request.data.get("email")
 
