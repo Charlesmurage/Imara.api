@@ -203,7 +203,7 @@ class MembershipView(generics.ListCreateAPIView):
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
 
-        def delete(self, request, pk):
+    def delete(self, request, pk):
         member = get_object_or_404(Membership.objects.all(), pk=pk)
         member.delete()
         
