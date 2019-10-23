@@ -122,3 +122,30 @@ def validate_signin_data(fn):
 
         return fn(*args, **kwargs)
     return decorated
+
+def validate_update_profile_data(fn):
+    def decorated(*args, **kwargs):
+        image = args[0].request.data.get("image", "")
+        first_name = args[0].request.data.get("first_name", "")
+        last_name = args[0].request.data.get("last_name", "")
+        stage_name = args[0].request.data.get("stage_name", "")
+        email = args[0].request.data.get("email", "")
+        phone = args[0].request.data.get("phone", "")
+        bio = args[0].request.data.get("bio", "")
+        county = args[0].request.data.get("county", "")
+        major_skill = args[0].request.data.get("major_skill", "")
+        minor_skill = args[0].request.data.get("minor_skill", "")
+
+        condition = [image, first_name, last_name, stage_name, email, phone, bio, county, major_skill, minor_skill]
+
+        if not any(condition):
+            return Response(
+                    data={
+                        "message": "The parameter passed is invalid for this request"
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        return fn(*args, **kwargs)
+    return decorated  
+

@@ -15,17 +15,24 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Creator
-        fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'password', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license')
+        fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license',)
+        write_only_fields = ('password',)
+        read_only_fields = ('is_staff', 'is_superuser', 'is_active', 'date_joined', 'last_login',)
 
     validate_password = make_password
 
 
-    def partial_update(self, instance,  validated_data):
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
+    # def partial_update(self, instance,  validated_data):
+    #     instance.first_name = validated_data.get('first_name', instance.first_name)
+    #     instance.last_name = validated_data.get('last_name', instance.last_name)
 
-        instance.save()
-        return instance
+    #     instance.save()
+    #     return instance
+
+class CreatorUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Creator
+        fields = ('image', 'bio', 'first_name', 'last_name','stage_name', 'email', 'phone', 'urban_centre', 'major_skill', 'minor_skill')
 
 class CreatorProfileSerializer(serializers.ModelSerializer):
     class Meta:
