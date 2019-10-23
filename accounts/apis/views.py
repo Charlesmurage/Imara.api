@@ -2,7 +2,19 @@ from rest_framework import generics
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
-from accounts.apis.serializers import UserSerializer, CreatorSerializer, CreatorProfileSerializer, GroupSerializer, MembershipSerializer, TokenSerializer, UserLoginSerializer, CountySerializer, UrbanSerializer, SkillsSerializer
+from accounts.apis.serializers import (
+    UserSerializer, 
+    CreatorSerializer, 
+    CreatorProfileSerializer, 
+    GroupSerializer, 
+    MembershipSerializer, 
+    TokenSerializer, 
+    UserLoginSerializer, 
+    CountySerializer, 
+    UrbanSerializer, 
+    SkillsSerializer,
+    CreatorUpdateSerializer
+)
 from django.contrib.auth import authenticate, login
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -13,7 +25,8 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-from .decorators import validate_signup_data, validate_signin_data
+from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data
+from rest_framework.parsers import MultiPartParser, FormParser
 
 
 # Classes related to all users on the system
@@ -116,26 +129,15 @@ class CreatorSignupView(generics.CreateAPIView):
         )        
 
 
-class CreatorPartialUpdateView(GenericAPIView, UpdateModelMixin):
+class CreatorDetailView(generics.RetrieveUpdateAPIView):
     '''
-    You just need to provide the field which is to be modified.
+    GET /api/v1/accounts/creators/{id}
+    PATCH /api/v1/accounts/creators/{id}
     '''
     permission_classes = (permissions.IsAuthenticated,)
-
-
+    parser_classes = (MultiPartParser, FormParser)
     queryset = Creator.objects.all()
-    serializer_class = CreatorSerializer
-    fields = ('first_name', 'last_name')
 
-    def patch(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
-
-# Classes related to all groups in the system
-class CreatorView(generics.RetrieveAPIView):
-    permission_classes = (permissions.IsAuthenticated,)
-    queryset = Creator.objects.all()
-    serializer_class = CreatorProfileSerializer
     def get(self, request, *args, **kwargs):
         try:
             creator = self.queryset.get(pk=kwargs["pk"])
@@ -154,6 +156,31 @@ class CreatorView(generics.RetrieveAPIView):
                 },
                 status=status.HTTP_404_NOT_FOUND
             )
+
+    @validate_update_profile_data
+    def patch(self, request, *args, **kwargs):
+        try:
+            creator = self.queryset.get(pk=kwargs["pk"])
+            if creator.id != request.user.id:
+                return Response(
+                    data={
+                        "message": "You do not have the required permissions"
+                    },
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            serializer = CreatorUpdateSerializer(creator, request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                creator = serializer.save()                
+                return Response(CreatorUpdateSerializer(creator).data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Creator.DoesNotExist:
+            return Response(
+                data={
+                    "message": "Creator with id: {} does not exist".format(kwargs["pk"])
+                },
+                status=status.HTTP_404_NOT_FOUND
+            )
+
 
 class GroupPartialUpdateView(GenericAPIView, UpdateModelMixin):
     '''
