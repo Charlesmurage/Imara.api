@@ -41,6 +41,7 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
+    members = serializers.StringRelatedField(many=True)
     
     class Meta:
         model = Group
@@ -61,7 +62,7 @@ class GroupSerializer(serializers.ModelSerializer):
 class MembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Membership
-        fields = ('creator', 'group')
+        fields = ('id', 'creator', 'group')
 
 class TokenSerializer(serializers.Serializer):
     """

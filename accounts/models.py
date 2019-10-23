@@ -89,7 +89,7 @@ class Creator(CustomUser):
     agree_to_license = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.email
+        return self.first_name
 
     class Meta: 
         verbose_name = 'Creator'
@@ -109,7 +109,7 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
-    #     return self.group
+    #     return self.creator
 
 
 
