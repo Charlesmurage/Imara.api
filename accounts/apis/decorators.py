@@ -20,7 +20,7 @@ def validate_signup_data(fn):
         minor_skill = args[0].request.data.get("minor_skill", "")
         agree_to_license = args[0].request.data.get("agree_to_license", "")
 
-        if not first_name or not last_name or not stage_name or not password or not email or not phone or not password or not urban_centre or not major_skill or not minor_skill:
+        if not first_name or not last_name or not stage_name or not email or not phone or not password or not urban_centre or not major_skill or not minor_skill:
             return Response(
                 data={
                     "message": "Please fill in all the fields"
