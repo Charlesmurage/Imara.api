@@ -132,11 +132,11 @@ def validate_update_profile_data(fn):
         email = args[0].request.data.get("email", "")
         phone = args[0].request.data.get("phone", "")
         bio = args[0].request.data.get("bio", "")
-        county = args[0].request.data.get("county", "")
+        urban_centre = args[0].request.data.get("urban_centre", "")
         major_skill = args[0].request.data.get("major_skill", "")
         minor_skill = args[0].request.data.get("minor_skill", "")
 
-        condition = [image, first_name, last_name, stage_name, email, phone, bio, county, major_skill, minor_skill]
+        condition = [image, first_name, last_name, stage_name, email, phone, bio, urban_centre, major_skill, minor_skill]
 
         if not any(condition):
             return Response(
