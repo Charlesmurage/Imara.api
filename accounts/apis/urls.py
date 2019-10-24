@@ -19,8 +19,8 @@ urlpatterns = [
     # URLs related to Content Creators
     path('creators/signup/', CreatorSignupView.as_view(), name="creator_signup"),
     path('creators/<int:pk>/', CreatorDetailView.as_view(), name='creator_update_profile'),
-    path('creators/group/update-partial/<int:pk>/', GroupPartialUpdateView.as_view(), name='update_group'),
-    path('creators/group/delete/<int:pk>/', GroupView.as_view(), name='delete_group'),
+    path('creators/groups/update-partial/<int:pk>/', GroupPartialUpdateView.as_view(), name='update_group'),
+    path('creators/groups/delete/<int:pk>/', GroupView.as_view(), name='delete_group'),
     path('creators/members/delete/<int:pk>/', MembershipView.as_view(), name='delete_member'),
     path('creators/groups/', GroupView.as_view(), name="groups"),
     path('creators/groups/<int:pk>/', GroupByIdView.as_view(), name="get_group_by_id"),

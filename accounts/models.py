@@ -99,6 +99,12 @@ class Creator(CustomUser):
 class Group(models.Model):
     name = models.CharField(max_length=128)
     members = models.ManyToManyField(Creator, through='Membership')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_createdby', on_delete=models.SET_NULL, null= True)
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_modifiedby', null=True, blank=True , on_delete=models.SET_NULL)                                   
+    created_on = models.DateTimeField(auto_now_add=True, null= True)
+    updated_on = models.DateTimeField(auto_now=True, editable=False)
+    
+                                      
 
     def __str__(self):
         return self.name

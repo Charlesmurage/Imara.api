@@ -13,6 +13,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         fields = ('email', 'phone', 'password')
 
 class CreatorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Creator
         fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license',)
@@ -42,10 +43,12 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     members = serializers.StringRelatedField(many=True)
+    created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    modified_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
     
     class Meta:
         model = Group
-        fields = ('name', 'members', )
+        fields = ('name','created_by','created_on','modified_by','updated_on', 'members', )
 
     def delete(self, request, pk):
         group = get_object_or_404(Group.objects.all(), pk=pk)
