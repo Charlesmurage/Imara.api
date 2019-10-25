@@ -1,6 +1,17 @@
 from django.urls import path, include
 from accounts.apis.views import (
-    UsersListView, CreatorDetailView, GroupPartialUpdateView, GroupView, GroupByIdView, MembershipView, CreatorSignupView, UserLoginView, CountiesView, UrbanCentresView, SkillsView
+    UsersListView, 
+    CreatorDetailView, 
+    GroupPartialUpdateView, 
+    GroupView, 
+    GroupByIdView, 
+    MembershipView, 
+    CreatorSignupView, 
+    UserLoginView, 
+    LogoutView,
+    CountiesView, 
+    UrbanCentresView, 
+    SkillsView
 )
 from django.contrib.auth import views as auth_views
 
@@ -15,6 +26,7 @@ urlpatterns = [
 
     path('users/', UsersListView.as_view(), name="list_all_users"),
     path('signin/', UserLoginView.as_view(), name="user_login"),
+    path('signout/', LogoutView.as_view(), name="user_login"),
 
     # URLs related to Content Creators
     path('creators/signup/', CreatorSignupView.as_view(), name="creator_signup"),

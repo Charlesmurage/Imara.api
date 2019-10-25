@@ -15,7 +15,7 @@ from accounts.apis.serializers import (
     SkillsSerializer,
     CreatorUpdateSerializer
 )
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -27,6 +27,7 @@ jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
 from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data, validate_group_data
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.core.exceptions import ObjectDoesNotExist
 
 
 # Classes related to all users on the system
@@ -96,6 +97,29 @@ class UserLoginView(generics.CreateAPIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
+class LogoutView(APIView):
+
+    """
+    Calls Django logout method and delete the Token object
+    assigned to the current User object.
+    Accepts/Returns nothing.
+    """
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+        except (AttributeError, ObjectDoesNotExist):
+            pass
+
+        logout(request)
+
+        return Response(
+                data={
+                    "success": "Successfully logged out."
+                },
+                status=status.HTTP_200_OK
+            )
 
 # Classes related to all Creators in the system
 
