@@ -194,7 +194,11 @@ class GroupPartialUpdateView(GenericAPIView, UpdateModelMixin):
     fields = ('name')
 
     def patch(self, request, *args, **kwargs):
+        user = self.request.user
         return self.partial_update(request, *args, **kwargs)
+    
+    def pre_save(self, request, obj):
+        obj.creator = request.user
 
 class GroupByIdView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -217,6 +221,7 @@ class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    
 
 
     def delete(self, request, pk):
