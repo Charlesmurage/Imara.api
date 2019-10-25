@@ -103,7 +103,7 @@ class Group(models.Model):
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_modifiedby', null=True, blank=True , on_delete=models.SET_NULL)                                   
     created_on = models.DateTimeField(auto_now_add=True, null= True)
     updated_on = models.DateTimeField(auto_now=True, editable=False)
-    
+
                                       
 
     def __str__(self):
