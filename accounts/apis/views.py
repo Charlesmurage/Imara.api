@@ -25,7 +25,7 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data
+from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data, validate_group_data
 from rest_framework.parsers import MultiPartParser, FormParser
 
 
@@ -221,6 +221,8 @@ class GroupView(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+    
     
 
 
@@ -231,10 +233,23 @@ class GroupView(generics.ListCreateAPIView):
         return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
 
 
-class MembershipView(generics.ListCreateAPIView):
+class MembershipView(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+    # @validate_group_data
+    # def post(self, request, *args, **kwargs):
+    #     creator = request.data.get("creator")
+
+    #     new_member = Membership.objects.create(
+    #         creator = creator
+    #     )
+
+    #     return Response(
+    #         data=GroupSerializer(new_member).data,
+    #         status=status.HTTP_201_CREATED
+    #     )    
 
     def delete(self, request, pk):
         member = get_object_or_404(Membership.objects.all(), pk=pk)

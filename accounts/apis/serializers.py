@@ -49,7 +49,7 @@ class GroupSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Group
-        fields = ('name','created_by','created_on','modified_by','updated_on', 'members', )
+        fields = ('name','created_by','created_on','modified_by','updated_on', 'members' )
 
     
     # def create(self, validated_data):

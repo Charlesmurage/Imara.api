@@ -3,7 +3,7 @@ from rest_framework.views import status
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import validate_email
-from accounts.models import CustomUser, Urban, Skills
+from accounts.models import CustomUser, Urban, Skills, Membership
 
 
 def validate_signup_data(fn):
@@ -148,4 +148,20 @@ def validate_update_profile_data(fn):
 
         return fn(*args, **kwargs)
     return decorated  
+
+def validate_group_data(fn):
+    def decorated(*args, **kwargs):
+        # args[0] == GenericView Object
+        creator = args[0].request.data.get("creator", "")
+
+        if Membership.objects.filter(creator = creator):
+            return Response(
+                data={
+                    "error": "You are already in this group"
+                },
+                status=status.HTTP_409_CONFLICT
+            )
+
+        return fn(*args, **kwargs)
+    return decorated
 
