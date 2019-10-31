@@ -25,7 +25,7 @@ from rest_framework.views import APIView
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 from django.shortcuts import get_object_or_404
-from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data
+from .decorators import validate_signup_data, validate_signin_data, validate_update_profile_data, validate_group_data
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -218,7 +218,11 @@ class GroupPartialUpdateView(GenericAPIView, UpdateModelMixin):
     fields = ('name')
 
     def patch(self, request, *args, **kwargs):
+        user = self.request.user
         return self.partial_update(request, *args, **kwargs)
+    
+    def pre_save(self, request, obj):
+        obj.creator = request.user
 
 class GroupByIdView(generics.RetrieveAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -242,6 +246,9 @@ class GroupView(generics.ListCreateAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+    
+    
+
 
     def delete(self, request, pk):
         group = get_object_or_404(Group.objects.all(), pk=pk)
@@ -250,10 +257,23 @@ class GroupView(generics.ListCreateAPIView):
         return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
 
 
-class MembershipView(generics.ListCreateAPIView):
+class MembershipView(generics.CreateAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     queryset = Membership.objects.all()
     serializer_class = MembershipSerializer
+
+    # @validate_group_data
+    # def post(self, request, *args, **kwargs):
+    #     creator = request.data.get("creator")
+
+    #     new_member = Membership.objects.create(
+    #         creator = creator
+    #     )
+
+    #     return Response(
+    #         data=GroupSerializer(new_member).data,
+    #         status=status.HTTP_201_CREATED
+    #     )    
 
     def delete(self, request, pk):
         member = get_object_or_404(Membership.objects.all(), pk=pk)

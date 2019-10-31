@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import models
 from accounts.models import CustomUser, Creator, Group, Membership, Counties, Urban, Skills
 from django.contrib.auth.hashers import make_password
 
@@ -13,6 +14,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
         fields = ('email', 'phone', 'password')
 
 class CreatorSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Creator
         fields = ('first_name', 'last_name','stage_name', 'email', 'phone', 'urban_centre', 'major_skill', 'minor_skill', 'agree_to_license',)
@@ -42,10 +44,19 @@ class CreatorProfileSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     members = serializers.StringRelatedField(many=True)
+    created_by = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    modified_by = serializers.CharField(read_only=True, default=serializers.CurrentUserDefault())
     
     class Meta:
         model = Group
-        fields = ('name', 'members', )
+        fields = ('name','created_by','created_on','modified_by','updated_on', 'members' )
+
+    
+    # def create(self, validated_data):
+    #     user = self.context['request'].user
+    #     return Group.objects.create(
+    #         created_by=user, **validated_data)
+
 
     def delete(self, request, pk):
         group = get_object_or_404(Group.objects.all(), pk=pk)
@@ -53,9 +64,11 @@ class GroupSerializer(serializers.ModelSerializer):
         
         return Response({"message":"Group with id '{}' has been deleted.".format(pk)},status=204)
 
-    def partial_update(self, instance,  validated_data):
-        instance.name = validated_data.get('name', instance.name)
 
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+        instance.name = validated_data.get('name', instance.name)
+        instance.modified_by = user
         instance.save()
         return instance
 

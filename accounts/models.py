@@ -99,13 +99,19 @@ class Creator(CustomUser):
 class Group(models.Model):
     name = models.CharField(max_length=128)
     members = models.ManyToManyField(Creator, through='Membership')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_createdby', on_delete=models.CASCADE)
+    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='%(class)s_modifiedby', on_delete=models.CASCADE, null=True )                                   
+    created_on = models.DateTimeField(auto_now_add=True, null= True)
+    updated_on = models.DateTimeField(auto_now=True, editable=False)
+
+                                      
 
     def __str__(self):
         return self.name
 
 class Membership(models.Model):
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # def __str__(self):
